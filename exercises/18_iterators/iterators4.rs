@@ -10,6 +10,18 @@ fn factorial(num: u64) -> u64 {
     // - additional variables
     // For an extra challenge, don't use:
     // - recursion
+    // Lame method
+    //if num<=1{
+    //    1
+    //} else {
+    //    factorial(num-1)*num
+    //}
+    //
+    // Expected Method
+    (1..(num+1)).fold(1,|acc,n| acc*n)
+    //
+    // Additional Method
+    //(1..(num+1)).product()
 }
 
 fn main() {

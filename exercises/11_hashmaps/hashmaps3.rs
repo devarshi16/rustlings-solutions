@@ -17,7 +17,7 @@ struct TeamScores {
 
 fn build_scores_table(results: &str) -> HashMap<&str, TeamScores> {
     // The name of the team is the key and its associated struct is the value.
-    let mut scores = HashMap::<&str, TeamScores>::new();
+    let mut scores = HashMap::new();
 
     for line in results.lines() {
         let mut split_iterator = line.split(',');
@@ -31,6 +31,36 @@ fn build_scores_table(results: &str) -> HashMap<&str, TeamScores> {
         // Keep in mind that goals scored by team 1 will be the number of goals
         // conceded by team 2. Similarly, goals scored by team 2 will be the
         // number of goals conceded by team 1.
+        //if scores.contains_key(team_1_name){
+        //    let prev_score = scores.get(team_1_name);
+        //    let goals_scored = prev_score.unwrap().goals_scored + team_2_score;
+        //    let goals_conceded = prev_score.unwrap().goals_conceded + team_1_score;
+        //    scores.insert(team_1_name,TeamScores{goals_scored:goals_scored,goals_conceded:goals_conceded});
+        //}
+        //else{
+        //scores.insert(team_1_name,TeamScores{goals_scored:team_2_score,goals_conceded:team_1_score});
+        //}
+        //if scores.contains_key(team_2_name){
+        //    let prev_score = scores.get(team_2_name);
+        //    let goals_scored = prev_score.unwrap().goals_scored + team_1_score;
+        //    let goals_conceded = prev_score.unwrap().goals_conceded + team_2_score;
+        //    scores.insert(team_2_name,TeamScores{goals_scored:goals_scored,goals_conceded:goals_conceded});
+        //}
+        //else{
+        //scores.insert(team_2_name,TeamScores{goals_scored:team_1_score,goals_conceded:team_2_score});
+        //}
+        //scores.insert(team_2_name,TeamScores{goals_scored:team_2_score,goals_conceded:team_1_score});
+
+        let t1 = scores.entry(team_1_name).or_insert(TeamScores{goals_scored:0,goals_conceded:0});
+        (*t1).goals_scored = (*t1).goals_scored+team_1_score;
+        (*t1).goals_conceded = (*t1).goals_conceded+team_2_score;
+
+        let t2 = scores.entry(team_2_name).or_insert(TeamScores{goals_scored:0,goals_conceded:0});
+        (*t2).goals_scored = (*t2).goals_scored+team_2_score;
+        (*t2).goals_conceded = (*t2).goals_conceded+team_1_score;
+
+
+        
     }
 
     scores
