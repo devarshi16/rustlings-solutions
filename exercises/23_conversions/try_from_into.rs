@@ -28,14 +28,30 @@ enum IntoColorError {
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
 
-    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {}
+    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        let (r,g,b) = (
+            u8::try_from(tuple.0).or(Err(IntoColorError::IntConversion))?,
+            u8::try_from(tuple.1).or(Err(IntoColorError::IntConversion))?,
+            u8::try_from(tuple.2).or(Err(IntoColorError::IntConversion))?,
+        );
+        Ok(Color{red:r, green:g, blue:b})
+    }
 }
 
 // TODO: Array implementation.
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
 
-    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {}
+    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        // Alternate method to wrap tuple implementation
+        // Color::try_from((arr[0],arr[1],arr[2]))
+        let (r,g,b) = (
+            u8::try_from(arr[0]).or(Err(IntoColorError::IntConversion))?,
+            u8::try_from(arr[1]).or(Err(IntoColorError::IntConversion))?,
+            u8::try_from(arr[2]).or(Err(IntoColorError::IntConversion))?,
+        );
+        Ok(Color{red:r, green:g, blue:b})
+    }
 }
 
 // TODO: Slice implementation.
@@ -43,7 +59,22 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
 
-    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {}
+    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        match slice{
+            [_r,_g,_b] => {
+                // Alternate method to wrap tuple implementation
+                //Color::try_from((*_r,*_g,*_b)) 
+                let (r,g,b) = (
+                    u8::try_from(slice[0]).or(Err(IntoColorError::IntConversion))?,
+                    u8::try_from(slice[1]).or(Err(IntoColorError::IntConversion))?,
+                    u8::try_from(slice[2]).or(Err(IntoColorError::IntConversion))?,
+                );
+                Ok(Color{red:r, green:g, blue:b})
+            }
+            _ => Err(IntoColorError::BadLen),
+        }
+        
+    }
 }
 
 fn main() {
